@@ -1,237 +1,291 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cálculo do FPM</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet" />
-  <style>
-    /* INÍCIO DO ESTILO NEO-BRUTALISTA COM PALETA DA IMAGEM */
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 10px;
-      background: #8C2D2D; /* Vermelho escuro do fundo da imagem */
-      color: #000000;
-      font-size: 14px;
-      font-weight: 700;
-    }
-    .topbar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 20px;
-      color: #FFFFFF; /* Texto branco para contraste com fundo vermelho */
-    }
-    .download-btn {
-      padding: 10px 15px;
-      font-size: 14px;
-      border-radius: 0;
-      background: #D9C6A5; /* Bege do patch */
-      color: #000000;
-      border: 2px solid #000000;
-      cursor: pointer;
-      font-weight: 700;
-      box-shadow: 4px 4px 0px #000000;
-      transition: all 0.15s ease-out;
-    }
-    .download-btn:hover {
-      background: #4A2A20; /* Marrom café no hover */
-      color: #D9C6A5;
-      box-shadow: 2px 2px 0px #000000;
-      transform: translate(2px, 2px);
-    }
-    .date-time {
-      flex-grow: 1;
-      font-style: normal;
-      color: #FFFFFF;
-      font-size: 14px;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: #D9C6A5; /* Bege do patch como fundo principal */
-      padding: 15px;
-      border-radius: 0;
-      border: 3px solid #000000;
-      box-shadow: 10px 10px 0px #000000;
-    }
-    .date-time-pdf {
-      font-size: 12px;
-      color: #000000;
-      margin-bottom: 8px;
-    }
-    .logo {
-      text-align: center;
-    }
-    .logo img {
-      width: 120px;
-      margin-bottom: 10px;
-    }
-    
-    /* NOVO ESTILO PARA O CONTÊINER DOS LOGOS */
-    .logos-container {
-      display: flex;
-      justify-content: right;
-      align-items: right;
-      gap: 175px; /* Espaço entre os logos */
-    }
-
-    .highlight {
-      text-align: center;
-      background: #4A2A20; /* Marrom café */
-      color: #D9C6A5; /* Texto bege */
-      border-radius: 0;
-      padding: 20px;
-      margin-bottom: 20px;
-      border: 2px solid #000;
-    }
-    .highlight .title-wide {
-      font-size: 24px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-    .highlight .subtitle {
-      font-size: 18px;
-      font-weight: 700;
-      opacity: 1;
-    }
-    .multiplier {
-      margin-top: 12px;
-      border-left: none;
-      border: 2px solid #000;
-      background: #FFFFFF;
-      padding: 10px 15px;
-      border-radius: 0;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .multiplier input {
-      font-size: 15px;
-      border: none;
-      text-align: right;
-      background: transparent;
-      width: 100px;
-      font-weight: 700;
-    }
-    .data-box, .deductions {
-      margin-top: 12px;
-      background: #FFFFFF;
-      padding: 10px 15px;
-      border-radius: 0;
-      box-shadow: none;
-      border: 2px solid #000;
-    }
-    /* Cores dos boxes inspiradas nos tons médios do patch */
-    .data-box.yellow { background: #EFE1C5; }  
-    .data-box.green { background: #A88F71; color: #fff; }
-
-    .data-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      padding: 6px 0;
-      font-size: 15px;
-    }
-    input.edit {
-      border: none;
-      background: transparent;
-      font-size: 15px;
-      text-align: right;
-      width: 100%;
-      font-weight: 700;
-    }
-    input.edit:focus {
-      outline: 2px solid #000;
-      background: #f0f0f0;
-    }
-    .blue-section {
-      background: #8C2D2D; /* Vermelho escuro */
-      color: #D9C6A5; /* Texto bege */
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 0;
-      text-align: center;
-      border: 2px solid #000;
-    }
-    .blue-section input {
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid #D9C6A5;
-      width: 40px;
-      font-size: 18px;
-      font-weight: 900;
-      color: #D9C6A5;
-      text-align: center;
-    }
-    .blue-section #resultadoMultiplicacao {
-      font-size: 2.5em;
-      font-weight: 900;
-      color: #000000;
-      background: none;
-      padding: 10px 20px;
-      border-radius: 0;
-      box-shadow: none;
-      letter-spacing: 1px;
-      display: block;
-      margin-top: 10px;
-      border: 2px solid #000;
-      background-color: #D9C6A5;
-    }
-    .blue-section #resultadoMultiplicacao:hover {
-      transform: none;
-    }
-    .liquid {
-      margin-top: 12px;
-      padding: 15px;
-      background: #000000;
-      color: #D9C6A5; /* Texto Bege */
-      font-weight: 700;
-      text-align: center;
-      font-size: 18px;
-      border: 2px solid #000;
-    }
-    .chart-container {
-      margin-top: 30px;
-      padding: 10px;
-      border: 2px solid #000;
-      background-color: #fff; /* Fundo branco para o gráfico */
-    }
-    canvas#grafico {
-      max-width: 100%;
-      height: 350px !important;
-    }
-    .logo-footer {
-      text-align: center;
-      background-color: #4A2A20; /* Marrom café */
-      color: #D9C6A5; /* Texto bege */
-      padding: 20px;
-      border-radius: 0;
-      font-size: 17px;
-      margin-top: 20px;
-      border: 3px solid #000;
-      box-shadow: 8px 8px 0 #8C2D2D;
-    }
-    .logo-footer img {
-      width: 100px;
-      margin-bottom: 4px;
-    }
-    .logo-footer .footer-text {
-      font-weight: 500;
-    }
-    .logo-footer .footer-text strong {
-      color: #FFFFFF;
-    }
-    /* FIM DO ESTILO */
-  </style>
+    <meta charset="UTF-8" />
+    <title>Cálculo do FPM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet" />
+    <style>
+        /* INÍCIO DO ESTILO */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: #8C2D2D;
+            color: #000000;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: #FFFFFF;
+        }
+        .download-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 0;
+            background: #D9C6A5;
+            color: #000000;
+            border: 2px solid #000000;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 4px 4px 0px #000000;
+            transition: all 0.15s ease-out;
+        }
+        .download-btn:hover {
+            background: #4A2A20;
+            color: #D9C6A5;
+            box-shadow: 2px 2px 0px #000000;
+            transform: translate(2px, 2px);
+        }
+        .date-time {
+            flex-grow: 1;
+            font-style: normal;
+            color: #FFFFFF;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #D9C6A5;
+            padding: 15px;
+            border-radius: 0;
+            border: 3px solid #000000;
+            box-shadow: 10px 10px 0px #000000;
+        }
+        .date-time-pdf {
+            font-size: 12px;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+        .logo {
+            text-align: center;
+        }
+        .logo img {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+        .logos-container {
+            display: flex;
+            justify-content: right;
+            align-items: right;
+            gap: 175px;
+        }
+        .highlight {
+            text-align: center;
+            background: #4A2A20;
+            color: #D9C6A5;
+            border-radius: 0;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #000;
+        }
+        .highlight .title-wide {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        .highlight .subtitle {
+            font-size: 18px;
+            font-weight: 700;
+            opacity: 1;
+        }
+        .multiplier {
+            margin-top: 12px;
+            border-left: none;
+            border: 2px solid #000;
+            background: #FFFFFF;
+            padding: 10px 15px;
+            border-radius: 0;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .multiplier input {
+            font-size: 15px;
+            border: none;
+            text-align: right;
+            background: transparent;
+            width: 100px;
+            font-weight: 700;
+        }
+        .data-box,
+        .deductions {
+            margin-top: 12px;
+            background: #FFFFFF;
+            padding: 10px 15px;
+            border-radius: 0;
+            box-shadow: none;
+            border: 2px solid #000;
+        }
+        .data-box.yellow {
+            background: #EFE1C5;
+        }
+        .data-box.green {
+            background: #A88F71;
+            color: #fff;
+        }
+        .data-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            padding: 6px 0;
+            font-size: 15px;
+        }
+        input.edit {
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            text-align: right;
+            width: 100%;
+            font-weight: 700;
+        }
+        input.edit:focus {
+            outline: 2px solid #000;
+            background: #f0f0f0;
+        }
+        .blue-section {
+            background: #8C2D2D;
+            color: #D9C6A5;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 0;
+            text-align: center;
+            border: 2px solid #000;
+        }
+        .blue-section input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #D9C6A5;
+            width: 40px;
+            font-size: 18px;
+            font-weight: 900;
+            color: #D9C6A5;
+            text-align: center;
+        }
+        .blue-section #resultadoMultiplicacao {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: #000000;
+            background: none;
+            padding: 10px 20px;
+            border-radius: 0;
+            box-shadow: none;
+            letter-spacing: 1px;
+            display: block;
+            margin-top: 10px;
+            border: 2px solid #000;
+            background-color: #D9C6A5;
+        }
+        .blue-section #resultadoMultiplicacao:hover {
+            transform: none;
+        }
+        .liquid {
+            margin-top: 12px;
+            padding: 15px;
+            background: #000000;
+            color: #D9C6A5;
+            font-weight: 700;
+            text-align: center;
+            font-size: 18px;
+            border: 2px solid #000;
+        }
+        .chart-container {
+            margin-top: 30px;
+            padding: 10px;
+            border: 2px solid #000;
+            background-color: #fff;
+        }
+        canvas#grafico {
+            max-width: 100%;
+            height: 350px !important;
+        }
+        .logo-footer {
+            text-align: center;
+            background-color: #4A2A20;
+            color: #D9C6A5;
+            padding: 20px;
+            border-radius: 0;
+            font-size: 17px;
+            margin-top: 20px;
+            border: 3px solid #000;
+            box-shadow: 8px 8px 0 #8C2D2D;
+        }
+        .logo-footer img {
+            width: 100px;
+            margin-bottom: 4px;
+        }
+        .logo-footer .footer-text {
+            font-weight: 500;
+        }
+        .logo-footer .footer-text strong {
+            color: #FFFFFF;
+        }
+        /* --- ESTILO DA TELA DE SENHA --- */
+        #tela-senha {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .caixa-senha {
+            background: #D9C6A5;
+            padding: 30px;
+            border: 3px solid #000;
+            box-shadow: 10px 10px 0px #000000;
+            text-align: center;
+        }
+        .caixa-senha h2 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+            color: #4A2A20;
+        }
+        .caixa-senha input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #000;
+            margin-bottom: 15px;
+            width: 200px;
+            text-align: center;
+        }
+        .caixa-senha button {
+            width: 100%;
+        }
+        #mensagem-erro {
+            color: #8C2D2D;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="date-time" id="dataHoraTela"></div>
-    <button onclick="baixarPNG()" class="download-btn">📥 BAIXAR PNG</button>
-  </div>
 
-  <div class="container">
+    <div id="tela-senha">
+        <div class="caixa-senha">
+            <h2>Acesso Restrito</h2>
+            <input type="password" id="campo-senha" placeholder="Digite a senha">
+            <button onclick="verificarSenha()" class="download-btn">ENTRAR</button>
+            <div id="mensagem-erro"></div>
+        </div>
+    </div>
+
+    <div id="conteudo-protegido" style="display: none;">
+
+        <div class="topbar">
+            <div class="date-time" id="dataHoraTela"></div>
+            <button onclick="baixarPNG()" class="download-btn">📥 BAIXAR PNG</button>
+        </div>
+
+       <div class="container">
     <div class="date-time-pdf">📅 Emitido em: <span id="dataHoraPdf"></span></div>
 
     <div class="logos-container">
@@ -249,222 +303,256 @@
     </div>
 
     <div class="highlight">
-      <div class="title-wide">PREFEITURA MUNICIPAL</div>
-      <div class="subtitle">Garanhuns</div>
+        <div class="title-wide">PREFEITURA MUNICIPAL</div>
+        <div class="subtitle">Garanhuns</div>
     </div>
 
     <div class="multiplier">
-      FATOR DE MULTIPLICAÇÃO:
-      <input type="text" id="multiplicador" class="edit" value="0.0000">
+        FATOR DE MULTIPLICAÇÃO:
+        <input type="text" id="multiplicador" class="edit" value="0.0000">
     </div>
 
     <div class="data-box yellow">
-      <div class="data-row">
-        <span>3ª Cota – Valor Bruto</span>
-        <input id="valorBrutoAnterior" class="edit" value="0,00">
-      </div>
+        <div class="data-row">
+            <span>3ª Cota – Valor Bruto</span>
+            <input id="valorBrutoAnterior" class="edit" value="0,00">
+        </div>
     </div>
 
     <div class="data-box green">
-      <div class="data-row">
-        <span>Cota equivalente – Valor Líquido</span>
-        <input id="valorLiquidoAnterior" class="edit" value="0,00">
-      </div>
-      <div class="data-row">
-        <span>Cota equivalente – Valor Bruto</span>
-        <input id="valorBrutoEquivalente" class="edit" value="0,00">
-      </div>
-      <div class="data-row">
-        <span>Índice de Repasse</span>
-        <span id="pesoPercentualFormatted">0,00%</span>
-      </div>
+        <div class="data-row">
+            <span>Cota equivalente – Valor Líquido</span>
+            <input id="valorLiquidoAnterior" class="edit" value="0,00">
+        </div>
+        <div class="data-row">
+            <span>Cota equivalente – Valor Bruto</span>
+            <input id="valorBrutoEquivalente" class="edit" value="0,00">
+        </div>
+        <div class="data-row">
+            <span>Índice de Repasse</span>
+            <span id="pesoPercentualFormatted">0,00%</span>
+        </div>
     </div>
 
     <div class="blue-section">
-      <strong>COTA Nº</strong>
-      <input id="cotaNumero" class="edit" value="00">
-      <span class="label">MÊS</span>
-      <input id="cotaMes" class="edit" value="00">
-      <br><br>
-      <span style="font-size:1.5em;font-weight:bold;font-family:'Roboto',sans-serif;">
-        💰 VALOR BRUTO:
-      </span>
-      <span id="resultadoMultiplicacao">-</span>
+        <strong>COTA Nº</strong>
+        <input id="cotaNumero" class="edit" value="00">
+        <span class="label">MÊS</span>
+        <input id="cotaMes" class="edit" value="00">
+        <br><br>
+        <span style="font-size:1.5em;font-weight:bold;font-family:'Roboto',sans-serif;">
+            💰 VALOR BRUTO:
+        </span>
+        <span id="resultadoMultiplicacao">-</span>
     </div>
 
     <div class="deductions">
-      <div class="data-row"><span>PASEP 1%</span><span id="deducaoPasep">0,00</span></div>
-      <div class="data-row"><span>SAÚDE 15%</span><span id="deducaoSaude">0,00</span></div>
-      <div class="data-row"><span>FUNDEB 20%</span><span id="deducaoFundeb">0,00</span></div>
-      <div class="data-row">
-        <span>Parcelamento RFB</span>
-        <input id="parcelamentoRfb" class="edit" value="0,00" style="width:80px">
-      </div>
-      <div class="data-row">
-        <strong>TOTAL DEDUÇÕES</strong>
-        <strong id="totalDeducoes">0,00</strong>
-      </div>
+        <div class="data-row"><span>PASEP 1%</span><span id="deducaoPasep">0,00</span></div>
+        <div class="data-row"><span>SAÚDE 15%</span><span id="deducaoSaude">0,00</span></div>
+        <div class="data-row"><span>FUNDEB 20%</span><span id="deducaoFundeb">0,00</span></div>
+        <div class="data-row">
+            <span>Parcelamento RFB</span>
+            <input id="parcelamentoRfb" class="edit" value="0,00" style="width:80px">
+        </div>
+        <div class="data-row">
+            <strong>TOTAL DEDUÇÕES</strong>
+            <strong id="totalDeducoes">0,00</strong>
+        </div>
     </div>
 
     <div class="liquid" style="margin-bottom: 20px;">
-      PREVISÃO LÍQUIDA - FPM: <span id="previsaoLiquida">0,00</span>
+        PREVISÃO LÍQUIDA - FPM: <span id="previsaoLiquida">0,00</span>
     </div>
     <div class="grafico-legenda" style="text-align:center; font-size:16px; font-weight:bold; color:#000; margin:10px 0 10px;">
-      Comparativo entre o valor bruto do mês anterior e do mês atual
+        Comparativo entre o valor bruto do mês anterior e do mês atual
     </div>
     <div class="chart-container">
-      <canvas id="grafico"></canvas>
+        <canvas id="grafico"></canvas>
+    </div>
+    </div>
+
+    <div class="logo-footer">
+        <img src="data:image/png;base64,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" alt="Logo Footer">
+        <div class="footer-text"><strong>Sistema desenvolvido pelo CESPAM</strong> - Reprodução por Terceiros Proibida®</div>
     </div>
   </div>
 
-  <div class="logo-footer">
-      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG8AAAB9CAMAAACbBc3CAAABAlBMVEX///9fGg3z1s7xy8LvxbuSZFtgGwz56ORyNSn56+f12tP89fNtLiJiHg7++vny0MepgnzezcujeXLqtqlMCQFCAgHz1M3SvblJBgGNW1HFqqTo3du0kItZFAdGAwH/5NuVamn/3NKETkVRDQJ7QTftwLVbHhpqKR3qs6WqiIRwLB69n5rGraiZaWL/69+SUEDj19Xx7Ov+1suiZ1uqcWJuNjRcJiKlfHSEQzWjgH7Vw8L/4NWARz1wOzfbr6OFVVGqdmy8iHzBmJDRn5NMIyLauLH3xbe9h3h+Oy3Mo5t6UVBSGhiPY2BcHhPjycN8SUTMkH81AQBeNza4emuRTz+iYVPSjZq5AAAM4klEQVRoge1bC3eiSBamBEFBQQXFFxJFmthqWkh3m6jJJOkxnczm0bPT/f//ytYbBE1MNtlzdnfuyQmVWwVfPe4bIgh/0/8IjQuy3KzLMoAkg7pVZq0m4ZWdulcGmCf3KA+2erQXsN54XNmrO+VgHm5Dm5VAkD84Pj6ozWvwB7dqm63a5+nBfINX2+jN014+7mD6uZYfAjDJwnUAsOHFdRnDLfIW5x1pWV6it5gZpx2hlQy3ABYAXrVqMIbIn2OorOUXs7xGjrUkJTOu6OPLEKS31AZtcrfI7+ZPFBucV8zyDD7DGE9K4YVgmsLLA3LNcTwxxotXUMzynsaTyHUFUniF4F3xKnIKr/SBXBPnx++Oz0rUsrwcRxaLmXEaxRul8c4KqtvI5XK+mWtgyplSjpLp85aY5fnbellLNOGvhupeNNN4N/1IhGSafUqmj35HUQR5IiVT4i1zS8vPjJNIp3vR27WffJ/cLbIv7bmfUmY/M/JSoiiXp6cHBwe109HllV0Ndczjmvh28sLwiid1bjXhpbSajhbnauY5L8bbtb7ipx7YpLLnFO7Gs/8YHpAdBy55OLc1weXn9454HDeYfuNm8M3wfvaSq9rcWcf6Upm9EV7A1vf7F0RfP0Bf2WtanuMkVoh+8nYKL7bmu/FOy2m8Dzomda3hqxb66+rkat4KnCaU1I2lDiZoVTqluCUprOWzluKTa8VJ4Z2duKIEybxm9uU66qtqQ/S/fT8+CTa31ht+M6HhkTCZpkTp0M+0/EN8Ofpez+xnqGuQDEmjJKn4AjV+qWqT+XBDReo3a10g40SR3eGrvKXQhuKT69xL492Ta8If8dMgnr5aGXo9urGybNXvqKw2Xnd+pQxe1v8tPnux0MrOCDP/PX142t+61VEhsa+r6jvjQT+qj5OIXXi674hHnpNAlB91t/82eNLu+EUfOU16kPLXy9jrvQKvwWcbca+3JV7qTB1Ppmbvag+8+a54yRUFnWhdf0u8FPt35faujpVDdnp/sHm9wL+f3Sxx/CKdfC0FQVAqnJ20uuu1CGMd99qPjM24xIiuI+mnx8zNynCNJ+OXo+/p+OWspCqqqrpG2aMa3fS8ugU+nhzfmoaiuJBU1TRUSr6kaLZFhcYDazhCNUXWy8cZJvrtuhdWCq9A97P40QMJcqxm7x+FeTWzn3iPOwNm375oz+znrvhF2cQjT7Oc+zvshTLxxJyuUPaqr4uXtuBRGnZDYZmJX8ZMEcFMiF6hDwo9v23+/X7k62k8YWI5OJeVm6H7GrzClxakwaoUZADLXrnLAphYJx/KRBPB13N+uvvjqdy+GOvFuNIKkNAw9y57XjBO4xVvvxDNtz6+Ai+2L318j7boPt57yXhiUN3EM1zdIgUD7/EFeJn8T+L27OHyj56XCJuQ3zNivKXQYQFObRfePO1veb6yxT9AOQi7JVbjQKI6E/ocD/n38J50Ou1d68vGS0sxFf3Qlghb/b5xflyOl+hdRddsHLwj6l+SsNHx1u6+8ZJSVCCJvkLJN3hLVJSipocji8UvTv2TWiziGxRJQr2TJhEoZ4bYvkpvVfHjikotEy/tk0+HF1w5LV5woPHSnKrMKd7PtD17XbwkuJMz6maBc0ZVkcUvA2rZkOF7q3gi0qHnZBasEG7gaQHhB/rbxhN2wKSGAPL4bGGRwt004Sme1/foqfXheYeDDcA4HpxTf1gVov3Xt2QcN+ML+D7l2Z4ON/AaxNbLX6lt2gfPPb6D5jpfq4y/PezEEw6YKW9Bu8fx3Ns/Mbtpq3vXlzRAjaFjWYXpuIN4W+pLbWbBDgSXz6YPjxCZGSc4Z6zd9aWbfl80DENi/hbnlgA8jlUl8hsGIVPCl77b+NQkePX10jRYb/QQoLvl+q8jypJI55b6UgHarEajIaX8OzySnz8MdbmEkI2GKeJal2Eslz9J3cTxfkQNSqZ/dFvH5g6aNfy0hmSi4bksXml7vAT116mDUWY/BVcdkfnUg1iuiqhsiyfJ6rmviZdkx/MoYiJeUgTqZr0u46F4aUEPgwYez8dLoP4xCJI1dvIAnHol8VwhJHGLbPFoEVncFRk/TuHtjCfOO6GmhZ3q5GJ1X04uc7yJp6IadKyFHG9BTcGeeI242q7qdi1IAOaF2G4QnZwnpsLwBJro23vixfYTlfLDcVwnkM+EOOIj9fICUYqynsCbEF5rP7ysvR5/aJIIEzjDdPxZpT2VBJ4QkHMNN/BeUr/uek3yCCvgeNTmjIhQeZhPvcKExKNYbJ/Ix/qRtK06HPX70Y/Ao8o2zC3jKrIULc+Jia5fHtE7JHF5DlAsY52gB/qHO+rJMB9zUeok+Tynknju5SoDEivJ3kfVdUk+hruOuri854C1y/Ix1x2gOTjOLWQ9m49tjV+gzE6ptWnaG/spCGThnh3vJ8lhZGci7GFfcnF1Y9PfsszLmcU8RF3CRvrG8rGQsAbCHvbF5f42HU/UQFKTOV5IHdMikf+1AJPQZ/Xh4bg2GtvI7fXT8QQLI7obeHAeMrUG/ARoUjjZA88mjnRVm4npeEJnxibcwHugBl6P880OmUJtHzz6zHLzZp3CE6o0iKht4CkfLWrA4vx2KFO7+jweC4XKVn212MQT7uhZhcn8SPmFfSw4SOBd9OgB7pYXqg9VkCRip+L4pUDipANoZzmvePUV130+xFGZQNy8vHgifiH6rlz9uVGrflSKXLdVVyHzBpZ6FFsD0R/iE2w+RKz+4n7D6VLv0t2p78SeSZE5/G2QKB17H8/7EbdxkUnMl/Wd8HAVyYwu8Syal9cwCyMDD/G43q++dIiHHf216/0Yri522nl+io9JzVAvUNolg7skT9HwJLwxjzoFA0cl8qOgUXez8/1Yjsbzs9/q2NfI4J/Ckleo+w8kzasLapzfqgIWUKcVe//GTwvbIqFI8Xbal9j/rQHxK84kx9cSaQdkmzvxe0IoTV/wuNI5xyP7ADyNrW8Pf3u0/oNITu/yiOPpNsmbx7F8Gn2oJ/hUf/BosX9F3MbsBXjQvpSwoDdvEu+BdeKYpuv4a4ClcIp5zb9ivDXBs7VobzxofWnE59mJOZDa9dltEq9N9uE4xiOlSmei74+H3nJgayODMz6HInWE999j77ikMWD9V4xX/YBZ45fgoRMakBXOYrwRllrrcyz7S2FG1vczxpthEQIjvp97xks6jofkU8bThAU2aYm1IOnFCtg74U/rh1jW5JFAy2Pb8rElypz8OLvyYV7TKKGD8IZqn/BE99Yiexexcb65FHGE1LwxWN52La3QFKxjAz9uS36E8r8MnmEcXSHL6wDfpfmfe74FzwhwRJbAEzFes0XwGrvzsXS81HGwhIZ8P0OsEL1PG/uJPbF1E++nfkcdya793FV/0bDAlGk+B+WlWiZ4SfnUCwSPzyEq/obl5S7cJS876z3EWbCMpEgdZP1XLJ99Gmk8ibd3fWmIM/kux2sTg/0rqQ8kAGzGeH3lEbMOXo5XKHuW5cR41Qqi08vkfnbQYZX/TOB1iL4fvMCeUbxZtXp+Xg05Hnti/P0S3M8OJp/PIeosbESd4ovxBEHYUudPvHWP60v9l7wP2Ot7om3fvzS2fL21R/2T1nclk1V1TVEhtVnF9EmfohzmeK/Eq78+HgR/DnlF+LChFBEpjUNa383ES7R+/T6UrV8z+/JOlKnPs/cP70SZ9w9MPt+JdurD/wPerN1mJbGwSqhD/tQX7Qnr6iD+jH9gpFdZB74JXeGFdT+BF+JseNCh4wiRJHqB/U6LKDNJmmkKhdNtFsahHLKKv2BlfuUJPK0EShUIE+CpdUEwRYTtNXQDg+6claryYDiNv5XVAeMTvC7JqtvP4lXAUMdzmxC8xIeiNkBKMymTKlMeT35KUdqgVGYfscJxYIU2INgDr0DGzDoawWvFY+Ak0EdogibEeF0wwH8NwaLC9tYGrSFM50Eh/zxeiLeeU5een03vgvs8pVl2HkwXdrdMyhUwAoWeP2B4tRHoaGBeeR6vk8YrB4ioKNg4L6xRPEwDvNoaWluBTgviVUHbBnb3eTwNV24gbkjxWpvjQrtGZ5QHq1qtQqUlAINprUD31gZTHawGQNtjfcKKTL+0RV66JfxHgUh5ngs7lCG67aBD8FoozCrBVT+PB4V5HIZwETOCNyCxAvoDhkrtMBzTrjzghXlhAKZI+wtEYmy4zgra9j3khas4Gckq1GQ4PbIaxWBvo1F+hLd/TK4TaB7QtOGQ5/UdTq8VlPJUQCat1gAR3dXxIAgG9BndFpu80G4R6LCFX85XWxXYbHXgEGZydr5/fyfK4OXTjLelYfrxi4S0vT114rOOZ9B5P7xC5v8DkCHb8l8Rb0JQT7b9wwV0boP82xP6pMXOwkFqr8B7UKGrbYX7m/4b6V+M8GIj9vHepQAAAABJRU5ErkJggg==" alt="Logo Footer">
-      <div class="footer-text"><strong>Sistema desenvolvido pelo CESPAM</strong> - Reprodução por Terceiros Proibida®</div>
-  </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // --- FUNÇÃO DE VERIFICAÇÃO DE SENHA ---
+        function verificarSenha() {
+            // IMPORTANTE: Altere 'sua-senha-aqui' para a senha que desejar.
+            const SENHA_CORRETA = 'Cespam10';
+            const senhaDigitada = document.getElementById('campo-senha').value;
+            const mensagemErro = document.getElementById('mensagem-erro');
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script>
-    const el = id => document.getElementById(id);
-    const val = id => el(id).value;
-    const parseBR = s => parseFloat(s.replace(/\./g,'').replace(',', '.')) || 0;
-    const fmt = n => new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
-
-    // Chart.js setup
-    const ctx = document.getElementById('grafico').getContext('2d');
-    const grafico = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: [''],
-        datasets: [
-          {
-            label: 'Cota mês anterior - Valor bruto',
-            data: [0],
-            backgroundColor: 'rgba(204, 255, 204, 1)',
-            borderColor: 'rgba(180, 150, 100, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Cota mês atual - Valor Bruto',
-            data: [0],
-            backgroundColor: 'rgba(255, 255, 204, 1)',
-            borderColor: 'rgba(180, 150, 100, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: 'y',
-        scales: {
-          x: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Valor (R$)'
+            if (senhaDigitada === SENHA_CORRETA) {
+                // Se a senha estiver correta, esconde a tela de senha e mostra o conteúdo
+                document.getElementById('tela-senha').style.display = 'none';
+                document.getElementById('conteudo-protegido').style.display = 'block';
+            } else {
+                // Se a senha estiver incorreta, mostra uma mensagem de erro
+                mensagemErro.textContent = 'Senha incorreta. Tente novamente.';
+                document.getElementById('campo-senha').value = '';
             }
-          }
         }
-      }
-    });
 
-    function atualizarGrafico(br, bev) {
-      grafico.data.datasets[1].data = [br];
-      grafico.data.datasets[0].data = [bev];
-      grafico.update();
-    }
+        // Adiciona um listener para a tecla "Enter" no campo de senha
+        document.getElementById('campo-senha').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                verificarSenha();
+            }
+        });
 
-    function calc() {
-      const vb = parseBR(val('valorBrutoAnterior'));
-      const m = parseFloat(val('multiplicador')) || 0;
-      const r = vb * m;
-      el('resultadoMultiplicacao').textContent = fmt(r);
-      calcDeductions(r);
-      atualizarGrafico(r, parseBR(val('valorBrutoEquivalente')));
-    }
+        // --- CÓDIGO ORIGINAL DA CALCULADORA ---
+        const el = id => document.getElementById(id);
+        const val = id => el(id).value;
+        const parseBR = s => parseFloat(s.replace(/\./g, '').replace(',', '.')) || 0;
+        const fmt = n => new Intl.NumberFormat('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(n);
 
-    function calcDeductions(br) {
-      const p = br * 0.01;
-      const s = br * 0.15;
-      const f = br * 0.20;
-      const rfb = parseBR(val('parcelamentoRfb'));
-      const tot = p + s + f + rfb;
-      el('deducaoPasep').textContent = fmt(p);
-      el('deducaoSaude').textContent = fmt(s);
-      el('deducaoFundeb').textContent = fmt(f);
-      el('totalDeducoes').textContent = fmt(tot);
-      el('previsaoLiquida').textContent = fmt(br - tot);
-    }
+        // Chart.js setup
+        const ctx = document.getElementById('grafico').getContext('2d');
+        const grafico = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [''],
+                datasets: [{
+                    label: 'Cota mês anterior - Valor bruto',
+                    data: [0],
+                    backgroundColor: 'rgba(204, 255, 204, 1)',
+                    borderColor: 'rgba(180, 150, 100, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Cota mês atual - Valor Bruto',
+                    data: [0],
+                    backgroundColor: 'rgba(255, 255, 204, 1)',
+                    borderColor: 'rgba(180, 150, 100, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Valor (R$)'
+                        }
+                    }
+                }
+            }
+        });
 
-    function updateRatio() {
-      const l = parseBR(val('valorLiquidoAnterior'));
-      const b = parseBR(val('valorBrutoEquivalente'));
-      el('pesoPercentualFormatted').textContent = b ?
-        ((l / b) * 100).toLocaleString('pt-BR',{minimumFractionDigits:2}) + '%' :
-        '0,00%';
-      calc();
-    }
+        function atualizarGrafico(br, bev) {
+            grafico.data.datasets[1].data = [br];
+            grafico.data.datasets[0].data = [bev];
+            grafico.update();
+        }
 
-    // Listeners
-    ['valorLiquidoAnterior','valorBrutoEquivalente'].forEach(id => el(id).oninput = updateRatio);
-    ['valorBrutoAnterior'].forEach(id => el(id).oninput = calc);
-    el('parcelamentoRfb').addEventListener('input', () => calcDeductions(parseBR(el('resultadoMultiplicacao').textContent)));
+        function calc() {
+            const vb = parseBR(val('valorBrutoAnterior'));
+            const m = parseFloat(val('multiplicador')) || 0;
+            const r = vb * m;
+            el('resultadoMultiplicacao').textContent = fmt(r);
+            calcDeductions(r);
+            atualizarGrafico(r, parseBR(val('valorBrutoEquivalente')));
+        }
 
-    el('multiplicador').addEventListener('input', e => {
-      let raw = e.target.value.replace(/\D/g, '');
-      if (!raw) raw = '0';
-      const num = parseFloat(raw) / 10000;
-      e.target.value = num.toFixed(4);
-      calc();
-    });
+        function calcDeductions(br) {
+            const p = br * 0.01;
+            const s = br * 0.15;
+            const f = br * 0.20;
+            const rfb = parseBR(val('parcelamentoRfb'));
+            const tot = p + s + f + rfb;
+            el('deducaoPasep').textContent = fmt(p);
+            el('deducaoSaude').textContent = fmt(s);
+            el('deducaoFundeb').textContent = fmt(f);
+            el('totalDeducoes').textContent = fmt(tot);
+            el('previsaoLiquida').textContent = fmt(br - tot);
+        }
 
-    el('multiplicador').addEventListener('blur', e => {
-      const num = parseFloat(e.target.value);
-      e.target.value = isNaN(num) ? '0.0000' : num.toFixed(4);
-      calc();
-    });
+        function updateRatio() {
+            const l = parseBR(val('valorLiquidoAnterior'));
+            const b = parseBR(val('valorBrutoEquivalente'));
+            el('pesoPercentualFormatted').textContent = b ?
+                ((l / b) * 100).toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2
+                }) + '%' :
+                '0,00%';
+            calc();
+        }
 
-    ['valorBrutoAnterior','valorLiquidoAnterior','valorBrutoEquivalente','parcelamentoRfb'].forEach(id => {
-      const inp = el(id);
-      inp.addEventListener('input', e => {
-        let v = e.target.value.replace(/\D/g, '');
-        v = (parseInt(v||0)/100).toFixed(2);
-        e.target.value = parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2});
-        if (id === 'valorBrutoAnterior') calc();
-        else if (id === 'valorLiquidoAnterior' || id === 'valorBrutoEquivalente') updateRatio();
-        else calcDeductions(parseBR(el('resultadoMultiplicacao').textContent));
-      });
-    });
+        // Listeners
+        ['valorLiquidoAnterior', 'valorBrutoEquivalente'].forEach(id => el(id).oninput = updateRatio);
+        ['valorBrutoAnterior'].forEach(id => el(id).oninput = calc);
+        el('parcelamentoRfb').addEventListener('input', () => calcDeductions(parseBR(el('resultadoMultiplicacao').textContent)));
 
-    function atualizarDataHora() {
-      const now = new Date().toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
-      el('dataHoraTela').textContent = '📅 ' + now;
-      el('dataHoraPdf').textContent = now;
-    }
+        el('multiplicador').addEventListener('input', e => {
+            let raw = e.target.value.replace(/\D/g, '');
+            if (!raw) raw = '0';
+            const num = parseFloat(raw) / 10000;
+            e.target.value = num.toFixed(4);
+            calc();
+        });
 
-    function baixarPNG() {
-      const elemento = document.querySelector('.container');
-      const nomeArquivo = `FPM_${val('cotaNumero')||'X'}_${val('cotaMes')||'00'}.png`;
+        el('multiplicador').addEventListener('blur', e => {
+            const num = parseFloat(e.target.value);
+            e.target.value = isNaN(num) ? '0.0000' : num.toFixed(4);
+            calc();
+        });
 
-      html2canvas(elemento, {
-        scale: 3,
-        useCORS: true
-      }).then(canvas => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = nomeArquivo;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      });
-    }
+        ['valorBrutoAnterior', 'valorLiquidoAnterior', 'valorBrutoEquivalente', 'parcelamentoRfb'].forEach(id => {
+            const inp = el(id);
+            inp.addEventListener('input', e => {
+                let v = e.target.value.replace(/\D/g, '');
+                v = (parseInt(v || 0) / 100).toFixed(2);
+                e.target.value = parseFloat(v).toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2
+                });
+                if (id === 'valorBrutoAnterior') calc();
+                else if (id === 'valorLiquidoAnterior' || id === 'valorBrutoEquivalente') updateRatio();
+                else calcDeductions(parseBR(el('resultadoMultiplicacao').textContent));
+            });
+        });
 
-    // Inicialização
-    atualizarDataHora();
-    setInterval(atualizarDataHora, 60000);
-    calc();
+        function atualizarDataHora() {
+            const now = new Date().toLocaleString('pt-BR', {
+                dateStyle: 'short',
+                timeStyle: 'short'
+            });
+            el('dataHoraTela').textContent = '📅 ' + now;
+            el('dataHoraPdf').textContent = now;
+        }
 
-  </script>
+        function baixarPNG() {
+            const elemento = document.querySelector('.container');
+            const nomeArquivo = `FPM_${val('cotaNumero')||'X'}_${val('cotaMes')||'00'}.png`;
+
+            html2canvas(elemento, {
+                scale: 3,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = nomeArquivo;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+
+        // Inicialização
+        atualizarDataHora();
+        setInterval(atualizarDataHora, 60000);
+        calc();
+    </script>
 </body>
 </html>
