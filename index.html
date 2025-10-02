@@ -622,7 +622,7 @@
                  mostrarModal('Por favor, adicione sua chave da API do Google Gemini no código para usar esta funcionalidade.');
                  return;
             }
-            const prompt = `Aja como um analista financeiro especialista em contas públicas municipais no Brasil. Para o município de ${municipio}, o cálculo da ${cotaNum}ª cota do FPM do mês ${cotaMes}/${cotaAno} apresentou os seguintes dados:\n- Valor Bruto da Cota Anterior (base para o fator): R$ ${valorBrutoAnterior}\n- Valor Bruto da Cota Equivalente (mês anterior): R$ ${valorBrutoEquivalente}\n- Valor Bruto Calculado para a Cota Atual: R$ ${valorBrutoResultado}\n- Total de Deduções (PASEP, Saúde, FUNDEB, etc.): R$ ${totalDeducoes}\n- Previsão Líquida para o município: R$ ${previsaoLiquida}\n\nCom base nesses dados, forneça uma análise concisa em um único parágrafo (máximo de 3-4 frases). A análise deve ser profissional, objetiva e útil para um gestor municipal. Compare brevemente o valor bruto atual com o do mês anterior, se for relevante, e comente sobre o impacto das deduções no valor líquido final. Finalize com uma recomendação prática ou ponto de atenção para a gestão financeira.`;
+            const prompt = `Aja como um analista financeiro especialista em contas públicas municipais no Brasil. Para o município de ${municipio}, o cálculo da ${cotaNum}ª cota do FPM do mês ${cotaMes}/${cotaAno} apresentou os seguintes dados:\n- Valor Bruto da Cota Anterior (base para o fator): R$ ${valorBrutoAnterior}\n- Valor Bruto da Cota Equivalente (mês anterior): R$ ${valorBrutoEquivalente}\n- Valor Bruto Calculado para a Cota Atual: R$ ${valorBrutoResultado}\n- Total de Deduções (PASEP, Saúde, FUNDEB, etc.): R$ ${totalDeducoes}\n- Previsão Líquida para o município: R$ ${previsaoLiquida}\n\nCom base nesses dados, forneça uma análise concisa em um único parágrafo (máximo de 3-4 frases). A análise deve ser profissional, objetiva e útil para um gestor municipal. Compare brevemente o valor bruto atual com o do mês anterior, se for relevante, e comente sobre o impacto das deduções no valor líquido final. Finalize com uma recomendação prática ou ponto de atenção para a gestão financeira.`" não fale sobre as deduções de forma nenhuma.`;
             callGeminiApi(prompt, true);
         }
 
@@ -640,7 +640,7 @@
             el('modal-botoes').style.display = 'none';
 
             const historicoFormatado = historico.slice(0, 10).reverse().map(item => `- Cota ${item.cota}/${item.mes}/${item.ano}: Valor Líquido R$ ${item.previsaoLiquida}`).join('\n');
-            const prompt = `Aja como um analista de dados financeiros especializado em finanças municipais. Analise os seguintes dados históricos de repasses líquidos do FPM para a prefeitura de Garanhuns:\n${historicoFormatado}\n\nCom base exclusivamente nesses dados, identifique a principal tendência (crescimento, queda ou estabilidade) dos valores líquidos. Forneça um resumo executivo de uma frase. Depois, apresente 2 ou 3 observações principais em formato de lista, usando "• " para cada ponto. Mantenha a análise curta, objetiva e focada nos dados fornecidos.`;
+            const prompt = `Aja como um analista de dados financeiros especializado em finanças municipais. Analise os seguintes dados históricos de repasses líquidos do FPM para a prefeitura de Garanhuns:\n${historicoFormatado}\n\nCom base exclusivamente nesses dados, identifique a principal tendência (crescimento, queda ou estabilidade) dos valores líquidos. Forneça um resumo executivo de uma frase. Depois, apresente 2 ou 3 observações principais em formato de lista, usando "• " para cada ponto. Mantenha a análise curta, objetiva e focada nos dados fornecidos.`" não fale sobre as deduções de forma nenhuma.`;
             
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
@@ -875,4 +875,5 @@
     </script>
 </body>
 </html>
+
 
